@@ -90,6 +90,13 @@ contract PayOut {
             console.log(_priceDecreaseBetter, " is a winner!");
             emit PayOutOccurrence(_priceDecreaseBetter, prevPrice, price);
         }
+
         console.log("Pay out done.");
+
+        changePrice();
+        console.log("Changed prices.");
+        changePriceDecimal();
+        console.log("Change price decimals.");
+        
     }
 }
