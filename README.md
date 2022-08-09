@@ -1,15 +1,3 @@
-# Basic Sample Hardhat Project
+Betting contract where users can bet on whether the price of ETH/USD goes up or down, winner gets .0001 ether
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
-
-Try running some of the following tasks:
-
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
-```
+Update 8/9/22: Modify contract so that it's not taking bets anymore. Now, it pays out to 1 of 2 of my addresses based on whether the price of ETH/USD goes up or not.

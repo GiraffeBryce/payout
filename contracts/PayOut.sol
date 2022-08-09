@@ -14,19 +14,12 @@ contract PayOut {
     uint256 payoutAmt;
     address private _owner;
     AggregatorV3Interface public priceFeed;
+    address private _priceIncreaseBetter;
+    address private _priceDecreaseBetter;
 
-    event NewBet(address indexed from, bool guess);
     event PriceChange(uint time, int256 currentPrice);
     event FundContract(address indexed from, uint value);
-    event PayOutOccurrence(address indexed winner);
-
-    struct Bet {
-        address payable better;
-        bool guessUp;
-    }
-
-    Bet[] bets;
-    Bet[] correctBets;
+    event PayOutOccurrence(address indexed winner, int256 prevPrice, int256 currPrice);
 
     constructor() payable {
         console.log("Hello my name is Bryce and I'm the casino owner :0");
@@ -37,6 +30,8 @@ contract PayOut {
         prevPriceDecimal = getLatestDecimals();
         price = getLatestPrice();
         priceDecimal = getLatestDecimals();
+        _priceIncreaseBetter = payable(0xF8d61d4bf4b1E9bd35aDbDdf8561A5226A81F316);
+        _priceDecreaseBetter = payable(0xCDE3727cE597B72Ebe29f0E8e9D639E694cb602C);
         emit PriceChange(block.timestamp, price);
     }
 
@@ -81,62 +76,20 @@ contract PayOut {
         priceDecimal = priceFeed.decimals();
     }
 
-    function bet(bool guess) external {
-        //Create bet
-        Bet memory betMade = Bet(payable(msg.sender), guess);
-        bets.push(betMade);
-        console.log("Another bet made: ");
-        if (guess) {
-            console.log("Bet price would go up.");
-        }
-        else {
-            console.log("Bet price would go down.");
-        }
-
-        emit NewBet(msg.sender, guess);
-    }
-
-    function getBets() public view returns (Bet[] memory) {
-        console.log("Bets size: ", bets.length);
-        return bets;
-    }
-
     function pay() external payable {
         // require(msg.sender == _owner, "Must be owner to call pay method");
         require(prevPrice != price, "Prices are still the same, can't pay out");
-        require(bets.length != 0, "No bets currently made, can't pay out");
-        bool truePriceDirection;
+        require(payoutAmt <= address(this).balance, "Not enough funds in contract to initiate payout");
         if(price > prevPrice) {
-            truePriceDirection = true;
+            payable(_priceIncreaseBetter).transfer(payoutAmt);
+            console.log(_priceIncreaseBetter, " is a winner!");
+            emit PayOutOccurrence(_priceIncreaseBetter, prevPrice, price);
         }
         else {
-            truePriceDirection = false;
-        }
-        
-        // iterate through bets to find closest bet
-        for(uint i=0; i<bets.length; i++){
-            if(bets[i].guessUp == truePriceDirection) {
-                correctBets.push(bets[i]);
-                console.log("Another winner: ", bets[i].better);
-            }
-            else {
-                console.log("This person didn't win:", bets[i].better);
-            }
-        }
-            
-        console.log("Current correctBets size:", correctBets.length);
-        assert(correctBets.length * payoutAmt <= address(this).balance);
-
-        for(uint i=0; i<correctBets.length; i++){
-            correctBets[i].better.transfer(payoutAmt);
-            console.log(correctBets[i].better, "is a winner!");
-            emit PayOutOccurrence(correctBets[i].better);
+            payable(_priceDecreaseBetter).transfer(payoutAmt);
+            console.log(_priceDecreaseBetter, " is a winner!");
+            emit PayOutOccurrence(_priceDecreaseBetter, prevPrice, price);
         }
         console.log("Pay out done.");
-
-        delete bets;
-        console.log("Bets reset. Size: ", bets.length);
-        delete correctBets;
-        console.log("Correct bets reset. Size: ", correctBets.length);
     }
 }

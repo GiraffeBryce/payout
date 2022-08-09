@@ -22,25 +22,6 @@ async function main() {
   // console.log("Price has changed.");
 
   // Get ETH/USD price and decimals
-  let prevPrice;
-  console.log("Getting previous price: ");
-  prevPrice = await PayOutContract.getPrevPrice();
-  console.log((prevPrice.toString()));
-
-  let prevDecimals;
-  console.log("Getting previous decimals: ");
-  prevDecimals = await PayOutContract.getPrevDecimals();
-  console.log(prevDecimals.toString());
-
-  let price;
-  console.log("Getting current price: ");
-  price = await PayOutContract.getStoredPrice();
-  console.log((price.toString()));
-
-  let decimals;
-  console.log("Getting current decimals: ");
-  decimals = await PayOutContract.getStoredDecimals();
-  console.log(decimals.toString());
 }
 
 // We recommend this pattern to be able to use async/await everywhere
