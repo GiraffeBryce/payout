@@ -3,25 +3,22 @@
 //
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
-const hre = require("hardhat");
 
 async function main() {
 
   const [deployer] = await hre.ethers.getSigners();
   const PayOutFactory = await ethers.getContractFactory("PayOut");
-  const PayOutContract = await PayOutFactory.deploy();
+  const PayOutContract = await PayOutFactory.deploy({value: ethers.utils.parseEther(".01")});
   await PayOutContract.deployed();
 
   console.log("PayOut deployed to:", PayOutContract.address);
   console.log("Contract deployed by:", deployer.address);
 
-  // let priceChange;
-  // console.log("Changing price now... ");
-  // priceChange = await PayOutContract.changePrice();
-  // priceDecimalChange = await PayOutContract.changePriceDecimal();
-  // console.log("Price has changed.");
+  let payout;
+  console.log("Testing payout now... ");
+  payout = await PayOutContract.pay();
+  console.log("Payout is finished.");
 
-  // Get ETH/USD price and decimals
 }
 
 // We recommend this pattern to be able to use async/await everywhere

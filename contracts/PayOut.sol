@@ -78,19 +78,21 @@ contract PayOut {
 
     function pay() external payable {
         // require(msg.sender == _owner, "Must be owner to call pay method");
-        require(prevPrice != price, "Prices are still the same, can't pay out");
         require(payoutAmt <= address(this).balance, "Not enough funds in contract to initiate payout");
         if(price > prevPrice) {
             payable(_priceIncreaseBetter).transfer(payoutAmt);
             console.log(_priceIncreaseBetter, " is a winner!");
             emit PayOutOccurrence(_priceIncreaseBetter, prevPrice, price);
         }
-        else {
+        else if (price < prevPrice) {
             payable(_priceDecreaseBetter).transfer(payoutAmt);
             console.log(_priceDecreaseBetter, " is a winner!");
             emit PayOutOccurrence(_priceDecreaseBetter, prevPrice, price);
         }
-
+        else {
+            console.log("Nobody won.");
+            emit PayOutOccurrence(address(0), prevPrice, price);
+        }
         console.log("Pay out done.");
 
         changePrice();
