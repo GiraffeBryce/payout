@@ -4,8 +4,8 @@ Update 8/9/22: Modify contract so that it's not taking bets anymore. Now, it pay
 
 Tips for how to run this project:
 -Make a .env file with:
-    - An alchemy key for a variable called TEST_ALCHEMY_KEY
-    - An Etherscan API key (for contract verification) called ETHERSCAN_API_KEY
+    - An alchemy key for a variable called TEST_ALCHEMY_KEY (get from Alchemy)
+    - An Etherscan API key (for contract verification) called ETHERSCAN_API_KEY (get from Etherscan)
     - A private key for an address you own with Rinkeby ETH in it for contract deployment called PRIVATE_KEY
 -Include the following code in your hardhat config file underneath the solidity version:
 
