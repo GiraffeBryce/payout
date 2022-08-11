@@ -3,6 +3,8 @@ Betting contract where users can bet on whether the price of ETH/USD goes up or 
 Update 8/9/22: Modify contract so that it's not taking bets anymore. Now, it pays out to 1 of 2 of my addresses based on whether the price of ETH/USD goes up or not.
 
 Tips for how to run this project:
+-Install hardhat verify plugin: npx install @nomiclabs/hardhat-etherscan
+-Include this at the top off hardhat config file: require(”@nomiclabs/hardhat-etherscan”);
 -Make a .env file with:
     - An alchemy key for a variable called TEST_ALCHEMY_KEY (get from Alchemy)
     - An Etherscan API key (for contract verification) called ETHERSCAN_API_KEY (get from Etherscan)
